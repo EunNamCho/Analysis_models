@@ -1,8 +1,0 @@
-class ViT(object):
-    """
-        1. Input image를 patch 단위로 나눠서 쭉 핀다 R^3 => R^2
-        2. 
-    """
-    def __init__(self):
-        self.patch_size = None
-        self.input_shape = None
