@@ -110,8 +110,14 @@ class ViT(nn.Module):
         2. 각 patch들 embedding layer 통과
         3. cls token 맨 앞에 부착후, PE 부여
 
+        ViT-B_16x16 기준으로 parameter 설정
+        emb_dim = MLP size
+        depth = layer
+        qkv_dim = hidden size
+
+        나머지는 임의로 지정
     """
-    def __init__(self, patch_size, input_size, emb_dim, depth, num_head, qkv_dim, dropout, emb_dropout, num_class):
+    def __init__(self, patch_size=(16,16), input_size=(244,244), emb_dim=3072, depth=12, num_head=12, qkv_dim=768, dropout=0., emb_dropout=0.3, num_class=1000):
         super().__init__()
 
         self.patch_size: Tuple[int, int] = patch_size        # H, W
