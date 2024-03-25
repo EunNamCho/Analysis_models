@@ -146,6 +146,8 @@ class ViT(nn.Module):
         self.transformer = Transformer(self.emb_dim, self.depth, self.num_head, self.qkv_dim, dropout)
         ##self.layernorm1 = nn.LayerNorm(self.emb_dim)
 
+        self.to_latent = nn.Identity()   ### 이것의 목적이 뭐지?
+
         self.mlp = nn.Linear(self.emb_dim, self.num_class)
         ##self.layernorm2 = nn.LayerNorm(self.emb_dim)
         
