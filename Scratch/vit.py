@@ -194,3 +194,8 @@ class ViT(nn.Module):
         y = self.layernorm3(x)
         return y
         """
+
+
+if __name__ == "__main__":
+    model = ViT()
+    
