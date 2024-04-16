@@ -63,15 +63,13 @@ class Attention(nn.Module):
             행렬곱의 특성으로 인해, k를 transpose하면, 모든 key와의 연산이 되지만,
             q를 transpose하면, 아까 말한 논쟁의 연산법이 된다.
             결론은, k.T를 해야한다.
-
-            
         """
         dots = q @ k.transpose(-1,-2) * self.scale # B * num_head * (patch_num + 1) * (patch_num + 1) 각 query와 모든 key의 상관관계
         attention_score = self.softmax(dots)       # B * num_head * (patch_num + 1) * (patch_num + 1) 점수로 변환
         attention_score = self.dropout(attention_score)
 
-        output = attention_score @ v               # B * num_head * (patch_num + 1) * qkv_dim                                # B * (patch_num + 1) * (qkv_dim * num_head) 
-        output = output.reshape(B, N, -1)
+        output = attention_score @ v               # B * num_head * (patch_num + 1) * qkv_dim                                 
+        output = output.reshape(B, N, -1)          # B * (patch_num + 1) * (qkv_dim * num_head)
         return output
 
 class Transformer(nn.Module):
@@ -160,6 +158,7 @@ class ViT(nn.Module):
     def forward(self, x):
         B, C, H, W = x.shape
 
+        #### Missing aware prompt도 그렇고, pytorch도 그렇고, patch divide + embedding을 묶어서 Conv2d로 해결
         x = x.reshape(B, self.patch_num, self.patch_dim)    # B * patch_num * (P^2 * C)
         x = self.patch_embedding(x)                         # B * patch_num * (P^2 * C) ==> B * patch_num * emb_dim
 
@@ -194,3 +193,9 @@ class ViT(nn.Module):
         y = self.layernorm3(x)
         return y
         """
+
+
+if __name__ == "__main__":
+    # ViT 논문에서는 patch 16,16 입력이미지는 244,244 니까 총 196개의 patch가 나옴. class token까지하면 197
+    model = ViT()
+    
